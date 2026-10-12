@@ -1,0 +1,17 @@
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    API_URL=http://127.0.0.1:8000
+
+WORKDIR /app
+
+COPY requirements/api.txt requirements/dashboard.txt requirements/
+RUN pip install --no-cache-dir -r requirements/api.txt -r requirements/dashboard.txt
+
+COPY . .
+RUN chmod +x /app/docker/start-platform.sh
+
+EXPOSE 10000
+CMD ["/app/docker/start-platform.sh"]
