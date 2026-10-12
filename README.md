@@ -91,7 +91,7 @@ Dans le dashboard, change la **pluie prévue** dans la barre latérale : carte, 
 
 ## 11. Dashboard
 
-7 pages : Overview, Risk Map, Forecast, Zones, Simulation, Resources, Alerts.
+Le dashboard de la branche `main` comporte 7 pages : Overview, Risk Map, Forecast, Zones, Simulation, Resources et Alerts. La branche V2 ajoute une huitième page, « Météo réelle », pour la prévision horaire Open-Meteo au point de référence Dakar.
 
 ## 12. Tests
 
@@ -123,7 +123,7 @@ Rapport détaillé : [docs/evaluation_eo4sd_2009.md](docs/evaluation_eo4sd_2009.
 - La répartition temporelle de la pluie (`/forecast`) est une **courbe synthétique**.
 - Poids et seuils sont des **hypothèses non calibrées** (pas de données de validation).
 - Le score additif a une limite connue : il suppose qu'une zone vulnérable garde un score élevé même avec peu de pluie (corrigé en partie par `min_rain_mm`) ; une méthode multiplicative est disponible.
-- Pas de temps réel, pas de capteurs, pas de trafic.
+- Pas de données en continu, pas de radar réel, pas de capteurs, pas de trafic. La branche V2 ajoute une prévision horaire Open-Meteo au point de référence Dakar, sans l'utiliser encore dans le score de risque.
 - **Non testé dans mon environnement de construction** : `docker compose up` (pas de Docker disponible), l'appel réel à l'API Open-Meteo (pas d'accès réseau). Testé : 64 tests unitaires/intégration, le schéma SQL et le chargeur sur PostgreSQL 16 + PostGIS 3.4, et les 7 pages du dashboard contre l'API.
 - Versions utilisées pour les tests : Python 3.12, FastAPI 0.143, pandas 3.0, shapely 2.2, Streamlit 1.65.
 
@@ -143,7 +143,7 @@ Guide de déploiement V2 : [docs/deployment.md](docs/deployment.md).
 | Version | Contenu |
 |---|---|
 | V1 | MVP : données synthétiques, score, carte, simulation *(ce dépôt)* |
-| V2 | Open-Meteo réel + Airflow (ingestion planifiée) |
+| V2 | Prévision horaire Open-Meteo au point de référence Dakar, provenance et qualité des données ; orchestration planifiée à évaluer ensuite |
 | V3 | PostGIS comme source de l'API + vraies données (OSM, altitude, EO4SD, GeoPandas) |
 | V4 | Capteurs IoT |
 | V5 | Kafka (flux temps réel) |
