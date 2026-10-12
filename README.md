@@ -133,7 +133,7 @@ Le cahier des charges cible et les critères de validation sont documentés dans
 
 Le développement V2 avance sur la branche `v2/strategic-center` pour ne pas modifier le service public avant validation. La première brique ajoute une route expérimentale `GET /api/v1/weather/forecast` qui récupère les précipitations horaires Open-Meteo pour le point de référence Dakar. Elle est accompagnée de contrôles de qualité et de tests simulant les réponses du fournisseur.
 
-Cette route n'est pas encore intégrée au dashboard principal, n'est pas exposée comme API publique dans le déploiement groupé actuel et n'est pas une prévision d'inondation. La comparaison historique EO4SD déjà documentée reste faible et ne valide pas le score du prototype.
+La branche V2 ajoute une page « Météo réelle » au dashboard pour afficher les précipitations horaires reçues par cette route. Cette page n'est pas encore présente dans le service public déployé depuis `main`, et les données météo ne constituent pas une prévision d'inondation. La comparaison historique EO4SD déjà documentée reste faible et ne valide pas le score du prototype.
 
 Guide de déploiement V2 : [docs/deployment.md](docs/deployment.md).
 
