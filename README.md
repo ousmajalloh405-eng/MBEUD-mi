@@ -64,6 +64,9 @@ PYTHONPATH=. uvicorn api.main:app --port 8000        # terminal 1
 API_URL=http://localhost:8000 streamlit run dashboard/app.py   # terminal 2
 ```
 
+**Option C — Démo en ligne**
+Consulte [docs/deployment.md](docs/deployment.md) pour déployer le dashboard et l'API ensemble sur Render depuis GitHub.
+
 ## 9. Utilisation
 
 ```bash
@@ -99,21 +102,16 @@ python -m pytest -q        # 64 tests : score, niveaux, validation, géospatial,
 
 ## 13. Évaluation exploratoire EO4SD — 2009
 
-Une première comparaison a été réalisée avec la couche historique
-d'étendues d'inondation de Dakar pour 2009, issue du catalogue
-ESA EO4SD-Urban.
+Une première comparaison a été réalisée avec la couche historique d'étendues d'inondation de Dakar pour 2009, issue du catalogue ESA EO4SD-Urban.
 
 - Zones expérimentales comparées : 862.
 - Pluie utilisée pour le scénario : 120 mm, hypothétique.
-- Corrélation de Spearman entre le score MNE et le recouvrement
-  historique : 0,0759.
+- Corrélation de Spearman entre le score MNE et le recouvrement historique : 0,0759.
 - Score moyen pour un recouvrement inférieur à 1 % : 61,716.
 - Score moyen pour un recouvrement d'au moins 1 % : 63,599.
 - Zones présentant au moins 10 % de recouvrement : 84.
 
-La corrélation observée est très faible. Cette analyse est descriptive :
-elle ne démontre pas que le modèle prédit correctement les inondations.
-Les variables d'exposition et de drainage restent notamment synthétiques.
+La corrélation observée est très faible. Cette analyse est descriptive : elle ne démontre pas que le modèle prédit correctement les inondations. Les variables d'exposition et de drainage restent notamment synthétiques.
 
 Rapport détaillé : [docs/evaluation_eo4sd_2009.md](docs/evaluation_eo4sd_2009.md).
 
