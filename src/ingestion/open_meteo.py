@@ -54,3 +54,31 @@ def parse_hourly(payload: dict) -> pd.DataFrame:
 def total_next_24h(df: pd.DataFrame) -> float:
     """Cumul de pluie sur les 24 premières heures de la série."""
     return float(df["precipitation_mm"].head(24).sum())
+
+
+def fetch_rain_window(latitude: float | None = None, longitude: float | None = None,
+                      forecast_hours: int = 24, past_hours: int = 6,
+                      timeout: int = 20) -> dict:
+    """Récupère le contexte pluviométrique récent et les prochaines heures.
+
+    Les valeurs passées proviennent des données météorologiques du fournisseur,
+    pas d'une image radar. Elles ne constituent pas une observation locale garantie.
+    """
+    if not 1 <= forecast_hours <= 48:
+        raise ValueError("forecast_hours doit être compris entre 1 et 48")
+    if not 0 <= past_hours <= 24:
+        raise ValueError("past_hours doit être compris entre 0 et 24")
+
+    cfg = settings()["weather"]
+    params = {
+        "latitude": latitude if latitude is not None else cfg["latitude"],
+        "longitude": longitude if longitude is not None else cfg["longitude"],
+        "current": "precipitation,rain,showers",
+        "hourly": "precipitation,precipitation_probability,rain,showers",
+        "forecast_hours": forecast_hours,
+        "past_hours": past_hours,
+        "timezone": "Africa/Dakar",
+    }
+    resp = requests.get(API_URL, params=params, timeout=timeout)
+    resp.raise_for_status()
+    return resp.json()
