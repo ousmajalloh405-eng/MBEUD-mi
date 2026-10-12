@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 
-import pandas as pd
 import requests
 from fastapi.testclient import TestClient
 
@@ -45,7 +44,8 @@ def test_weather_forecast_returns_provider_data(monkeypatch):
     assert len(body["hourly"]) == 24
     assert body["forecast_precipitation_total_mm"] == 12.0
     assert body["hourly"][0]["time"] == "2026-10-12T06:00:00"
-    assert "pas une image radar" in body["disclaimer"]
+    assert "image radar" in body["disclaimer"]
+    assert body["units"]["precipitation_mm"] == "mm par heure"
 
 
 def test_weather_forecast_returns_502_on_provider_failure(monkeypatch):
