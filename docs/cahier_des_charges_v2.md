@@ -34,7 +34,7 @@ Les besoins, responsabilités, autorisations d'accès et processus de validation
 - Fournir une route API explicitement marquée comme donnée de fournisseur, avec horodatage, unités, durée couverte et attribution.
 - Contrôler la structure, l'ordre des horaires et les valeurs de précipitation.
 - Gérer timeout, erreur fournisseur et réponse invalide avec des erreurs explicites.
-- Conserver les pages actuelles du dashboard inchangées jusqu'à ce que la route ait été vérifiée en tests et dans un navigateur.
+- Ajouter une page distincte « Météo réelle » au dashboard de développement, sans réutiliser ces valeurs comme entrées du score synthétique. Vérifier cette page en tests et dans un navigateur avant fusion vers `main`.
 
 Cette étape ne fournit **pas** un radar, une prévision d'inondation, une cartographie nationale ni une alerte officielle. Une prévision météo sur un point ne décrit pas à elle seule la pluie sur tout un quartier.
 
