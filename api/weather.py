@@ -96,6 +96,12 @@ def rain_forecast():
         },
         "current": current_summary,
         "hourly": forecast_rows,
+        "units": {
+            "precipitation_mm": "mm par heure",
+            "precipitation_probability_pct": "%",
+            "rain_mm": "mm par heure",
+            "showers_mm": "mm par heure",
+        },
         "forecast_hours_available": len(forecast_rows),
         "forecast_precipitation_total_mm": round(
             sum(row["precipitation_mm"] for row in forecast_rows), 2
