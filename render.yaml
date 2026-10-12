@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: mbeud-mi
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./docker/Dockerfile.platform
+    dockerContext: .
+    healthCheckPath: /_stcore/health
