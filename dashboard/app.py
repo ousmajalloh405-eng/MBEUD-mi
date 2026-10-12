@@ -36,6 +36,12 @@ def get_risk(rain: float):
     return api_get("/risk", rain_mm=rain)
 
 
+@st.cache_data(ttl=600, show_spinner=False)
+def get_weather_forecast():
+    """Prévisions météo réelles depuis le fournisseur, sans fallback synthétique."""
+    return api_get("/api/v1/weather/forecast")
+
+
 @st.cache_data(ttl=120, show_spinner=False)
 def get_simulation(rain: float, pumps: int, teams: int, vehicles: int):
     return api_post("/simulation", {"rain_mm": rain, "pumps": pumps, "teams": teams,
@@ -43,9 +49,9 @@ def get_simulation(rain: float, pumps: int, teams: int, vehicles: int):
 
 
 # --- Barre latérale : scénario de pluie partagé par toutes les pages --------------------
-st.sidebar.title("🌧️ Flood Risk Senegal")
+st.sidebar.title("🌧️ MBEUD-mi")
 page = st.sidebar.radio("Page", ["Overview", "Risk Map", "Forecast", "Zones",
-                                 "Simulation", "Resources", "Alerts"])
+                                 "Simulation", "Resources", "Alerts", "Météo réelle"])
 choice = st.sidebar.selectbox("Pluie prévue (24 h)", [f"{p} mm" for p in PRESETS] + ["Personnalisée"], index=2)
 if choice == "Personnalisée":
     rain = st.sidebar.number_input("Pluie (mm)", min_value=0.0, max_value=500.0, value=100.0, step=5.0)
@@ -140,3 +146,53 @@ elif page == "Alerts":
         st.success("Aucune zone au niveau « très élevé » ou plus pour ce scénario.")
     for a in data["alerts"]:
         st.markdown(f"**{a['level'].upper()}** — {a['message']}  \n↳ {a['priority_proposed']}")
+
+
+elif page == "Météo réelle":
+    st.header("Prévisions horaires de précipitation — Dakar")
+    st.caption(
+        "Données du fournisseur Open-Meteo au point de référence configuré pour Dakar. "
+        "Cette vue météo est indépendante des scores de risque synthétiques."
+    )
+    try:
+        with st.spinner("Récupération des prévisions horaires…"):
+            weather = get_weather_forecast()
+    except requests.RequestException as exc:
+        st.error(f"Impossible de récupérer les données météo réelles : {exc}")
+        st.info(
+            "Aucune donnée synthétique n'est utilisée en remplacement. "
+            "Réessaie plus tard ou vérifie la connexion de l'API."
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        st.error(f"La réponse météo reçue n'est pas exploitable : {exc}")
+    else:
+        st.caption(
+            f"Source : {weather['source']} · "
+            f"Récupérée le : {weather['retrieved_at_utc']} · "
+            f"Origine : {weather['data_origin']}"
+        )
+        current = weather.get("current", {})
+        c1, c2 = st.columns(2)
+        precipitation = current.get("precipitation")
+        c1.metric(
+            "Précipitations actuelles",
+            f"{float(precipitation):.1f} mm" if precipitation is not None else "Non disponible",
+        )
+        c2.metric(
+            "Cumul des heures affichées",
+            f"{weather['forecast_precipitation_total_mm']:.1f} mm",
+        )
+        weather_df = pd.DataFrame(weather.get("hourly", []))
+        if weather_df.empty:
+            st.warning("Le fournisseur n'a retourné aucune heure exploitable.")
+        else:
+            st.subheader("Précipitations horaires prévues (mm/h)")
+            st.line_chart(weather_df.set_index("time")[["precipitation_mm"]])
+            if "precipitation_probability_pct" in weather_df.columns:
+                st.subheader("Probabilité de précipitation (%)")
+                st.line_chart(
+                    weather_df.set_index("time")[["precipitation_probability_pct"]]
+                )
+            st.dataframe(weather_df, width="stretch", hide_index=True)
+        st.caption(weather["disclaimer"])
+        st.caption("Attribution : Weather data by Open-Meteo (CC BY 4.0).")
