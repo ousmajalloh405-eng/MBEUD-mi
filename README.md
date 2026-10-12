@@ -127,7 +127,18 @@ Rapport détaillé : [docs/evaluation_eo4sd_2009.md](docs/evaluation_eo4sd_2009.
 - **Non testé dans mon environnement de construction** : `docker compose up` (pas de Docker disponible), l'appel réel à l'API Open-Meteo (pas d'accès réseau). Testé : 64 tests unitaires/intégration, le schéma SQL et le chargeur sur PostgreSQL 16 + PostGIS 3.4, et les 7 pages du dashboard contre l'API.
 - Versions utilisées pour les tests : Python 3.12, FastAPI 0.143, pandas 3.0, shapely 2.2, Streamlit 1.65.
 
-## 15. Roadmap
+## 15. Feuille de route V2 — centre géospatial d'anticipation
+
+Le cahier des charges cible et les critères de validation sont documentés dans [docs/cahier_des_charges_v2.md](docs/cahier_des_charges_v2.md).
+
+Le développement V2 avance sur la branche `v2/strategic-center` pour ne pas modifier le service public avant validation. La première brique ajoute une route expérimentale `GET /api/v1/weather/forecast` qui récupère les précipitations horaires Open-Meteo pour le point de référence Dakar. Elle est accompagnée de contrôles de qualité et de tests simulant les réponses du fournisseur.
+
+Cette route n'est pas encore intégrée au dashboard principal, n'est pas exposée comme API publique dans le déploiement groupé actuel et n'est pas une prévision d'inondation. La comparaison historique EO4SD déjà documentée reste faible et ne valide pas le score du prototype.
+
+Guide de déploiement V2 : [docs/deployment.md](docs/deployment.md).
+
+## 16. Roadmap
+
 
 | Version | Contenu |
 |---|---|
