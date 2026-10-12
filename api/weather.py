@@ -1,6 +1,6 @@
 """Routes météo expérimentales alimentées par Open-Meteo."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pandas as pd
 import requests
@@ -87,7 +87,7 @@ def rain_forecast():
         "source": "Open-Meteo",
         "attribution": "Weather data by Open-Meteo",
         "data_origin": "LIVE_PROVIDER_DATA",
-        "retrieved_at_utc": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "retrieved_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "location": {
             "name": "Point de référence Dakar",
             "latitude": latitude,
