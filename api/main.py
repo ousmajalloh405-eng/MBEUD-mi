@@ -5,6 +5,8 @@ Toutes les réponses reposent sur des DONNÉES SYNTHÉTIQUES : voir 'data_origin
 """
 from fastapi import FastAPI, HTTPException, Query
 
+from api.weather import router as weather_router
+
 from api.schemas import SimulationRequest
 from src.alerts.generate import generate_alerts
 from src.config import settings
@@ -22,6 +24,8 @@ app = FastAPI(
     version="0.1.0",
     description=DISCLAIMER,
 )
+
+app.include_router(weather_router)
 
 RAIN = Query(None, ge=0, le=500, description="Pluie cumulée sur 24 h (mm). Défaut : valeur de config.")
 
