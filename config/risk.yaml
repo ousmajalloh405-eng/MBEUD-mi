@@ -1,0 +1,39 @@
+# Paramètres du Flood Risk Score.
+# Les poids sont RELATIFS : ils sont normalisés automatiquement (somme = 1).
+# Tous ces choix sont des HYPOTHÈSES de départ, à justifier dans docs/risk_model.md.
+
+method: weighted_sum        # weighted_sum | multiplicative
+min_rain_mm: 10             # en dessous, on considère qu'il n'y a pas d'aléa -> score 0
+rain_ref_mm: 150            # pluie (24 h) qui correspond à un aléa maximal (hazard = 1)
+
+block_weights:              # les 3 blocs du risque
+  hazard: 0.40
+  vulnerability: 0.35
+  exposure: 0.25
+
+vulnerability_weights:
+  low_elevation: 0.35
+  low_slope: 0.15
+  flood_history: 0.30
+  poor_drainage: 0.20
+
+exposure_weights:
+  population: 0.50
+  infrastructure: 0.30
+  roads: 0.20
+
+infrastructure_weights:     # importance relative des infrastructures critiques
+  hospitals: 3.0
+  schools: 1.0
+  markets: 1.5
+
+reference:
+  elevation_max_m: 20       # au-dessus de cette altitude : pas de risque lié à l'altitude
+  slope_max_deg: 0.5        # au-dessus de cette pente : l'eau s'écoule, pas de stagnation (terrain très plat à Dakar)
+
+levels:                     # seuils ILLUSTRATIFS (exemple du cahier des charges)
+  - {name: faible, max_score: 20}
+  - {name: modéré, max_score: 40}
+  - {name: élevé, max_score: 60}
+  - {name: très élevé, max_score: 80}
+  - {name: critique, max_score: 100}

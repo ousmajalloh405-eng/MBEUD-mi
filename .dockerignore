@@ -1,0 +1,16 @@
+.git
+.venv
+__pycache__
+.pytest_cache
+.env
+*.zip
+# Données volumineuses ou générées, disponibles séparément
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Secrets et configurations locales
+.env.*
+.vscode/
+.agents/

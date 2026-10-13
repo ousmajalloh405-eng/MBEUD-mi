@@ -1,0 +1,24 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+*.zip
+
+# Secrets et configurations locales
+.env.*
+!.env.example
+
+# Fichiers générés par les outils de développement
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.DS_Store
+# Paramètres IDE locaux
+.vscode/
+.agents/

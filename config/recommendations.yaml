@@ -1,0 +1,30 @@
+# Recommandations par niveau. Ce sont des "priorités proposées", jamais des ordres.
+levels:
+  faible:
+    - "Aucune action particulière : veille météorologique habituelle."
+  modéré:
+    - "Surveiller l'évolution des prévisions."
+    - "Vérifier que les points de drainage connus sont dégagés."
+  élevé:
+    - "Priorité proposée : prévoir des moyens de pompage mobiles à proximité."
+    - "Surveiller les axes routiers de la zone."
+    - "Informer les relais locaux."
+  très élevé:
+    - "Priorité proposée : prépositionner des moyens de pompage."
+    - "Prévenir les équipes de secours et vérifier leur disponibilité."
+    - "Surveiller les axes routiers et préparer des itinéraires alternatifs."
+    - "Vérifier l'état des infrastructures critiques (santé, écoles)."
+  critique:
+    - "Priorité proposée : prépositionner des moyens de pompage."
+    - "Préparer les équipes de secours."
+    - "Surveiller les axes routiers."
+    - "Préparer une communication aux populations."
+    - "Vérifier les infrastructures critiques."
+
+# Plafond de ressources proposé PAR ZONE selon son niveau (simulation algorithmique).
+resources_caps:
+  critique: {pumps: 3, teams: 2, vehicles: 2}
+  très élevé: {pumps: 2, teams: 1, vehicles: 1}
+  élevé: {pumps: 1, teams: 0, vehicles: 0}
+
+default_resources: {pumps: 10, teams: 5, vehicles: 10}

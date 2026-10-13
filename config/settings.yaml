@@ -1,0 +1,27 @@
+# Configuration générale du projet.
+# Modifier ces valeurs ne demande aucun changement de code.
+project:
+  name: flood-risk-senegal
+  data_label: "SYNTHETIC DATA — FOR DEMONSTRATION ONLY"
+
+grid:
+  cell_size_m: 500          # taille d'une cellule (essaie 1000 pour une grille plus grossière)
+  bbox:                     # zone d'étude approximative : Dakar et banlieue
+    lon_min: -17.55
+    lon_max: -17.15
+    lat_min: 14.64
+    lat_max: 14.85
+
+synthetic:
+  seed: 42                  # même graine = mêmes données (reproductible)
+
+paths:
+  synthetic_zones: data/synthetic/zones.geojson
+  processed_dir: data/processed
+  raw_dir: data/raw
+
+weather:
+  latitude: 14.72           # point unique pour l'appel Open-Meteo (MVP)
+  longitude: -17.40
+  default_rain_mm: 100
+  presets_mm: [50, 80, 100, 120, 150]
