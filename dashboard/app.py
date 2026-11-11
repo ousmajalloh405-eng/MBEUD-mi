@@ -31,6 +31,29 @@ def api_post(path: str, payload: dict):
     return r.json()
 
 
+def get_live_weather():
+    """Récupère la pluie actuelle réelle à Dakar via Open-Meteo."""
+    try:
+        url = "https://api.open-meteo.com/v1/forecast"
+        params = {
+            "latitude": 14.7167,
+            "longitude": -17.4677,
+            "current": "precipitation",
+            "hourly": "precipitation",
+            "forecast_days": 1,
+            "timezone": "auto",
+        }
+        r = requests.get(url, params=params, timeout=10)
+        r.raise_for_status()
+        data = r.json()
+        current = data.get("current", {}).get("precipitation", 0)
+        hourly = data.get("hourly", {}).get("precipitation", [])
+        next_24h = sum(hourly[:24]) if hourly else 0
+        return {"current_mm": round(current, 1), "next_24h_mm": round(next_24h, 1)}
+    except Exception:
+        return None
+
+
 @st.cache_data(ttl=120, show_spinner=False)
 def get_risk(rain: float):
     return api_get("/risk", rain_mm=rain)
@@ -42,7 +65,7 @@ def get_simulation(rain: float, pumps: int, teams: int, vehicles: int):
                                     "vehicles": vehicles, "top_n": 25})
 
 
-# --- Barre latérale : scénario de pluie partagé par toutes les pages --------------------
+# --- Barre latérale ---------------------------------------------------------
 st.sidebar.title("🌧️ Flood Risk Senegal")
 page = st.sidebar.radio("Page", ["Overview", "Risk Map", "Forecast", "Zones",
                                  "Simulation", "Resources", "Alerts"])
@@ -51,6 +74,14 @@ if choice == "Personnalisée":
     rain = st.sidebar.number_input("Pluie (mm)", min_value=0.0, max_value=500.0, value=100.0, step=5.0)
 else:
     rain = float(choice.split()[0])
+
+# Météo réelle
+live = get_live_weather()
+if live:
+    st.sidebar.success(f"Météo réelle Dakar\nActuelle : {live['current_mm']} mm\nCumul 24h : {live['next_24h_mm']} mm")
+else:
+    st.sidebar.info("Météo réelle indisponible")
+
 st.sidebar.caption("SYNTHETIC DATA — FOR DEMONSTRATION ONLY")
 
 st.warning("Prototype pédagogique d'aide à la décision, sur données synthétiques. "
@@ -60,7 +91,7 @@ st.warning("Prototype pédagogique d'aide à la décision, sur données synthét
 try:
     risk = get_risk(rain)
     sim = get_simulation(rain, 10, 5, 10)
-except Exception as exc:  # API pas encore prête, ou arrêtée
+except Exception as exc:
     st.error(f"Impossible de joindre l'API ({API_URL}) : {exc}")
     st.stop()
 
